@@ -27,7 +27,6 @@ public class UssdMenuResolver {
 
         reservedMessages = Lists.newArrayList(exitMessage, backMessage);
         final String ussdMesPatternString = getApplicationConfig("ussd.message.pattern");
-        System.out.println("ussd message pattern string " + ussdMesPatternString);
         ussdMessagePattern = Pattern.compile(ussdMesPatternString);
     }
 
@@ -93,10 +92,13 @@ public class UssdMenuResolver {
     }
 
     private Optional<String> getPreviousMenuId(UssdMenu currentUssdMenu) {
+
+        if(getMessage("invalid.input.message").get().equals(currentUssdMenu.getMessage())) {
+            return Optional.of(currentUssdMenu.getMenuId());
+        }
+
         final Matcher matcher = ussdMessagePattern.matcher(currentUssdMenu.getMenuId());
-        System.out.println("current ussd menu - " + currentUssdMenu.getMenuId());
         if(!matcher.matches()) {
-            System.out.println("Not matching the pattern");
             return Optional.absent();
         } else {
             return Optional.fromNullable(matcher.group("prvMenuId"));
