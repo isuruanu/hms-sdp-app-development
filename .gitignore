@@ -5,7 +5,11 @@
 *.war
 *.ear
 
+#maven
+target
+
 # idea
 *.iws
 *.ipr
 *.iml
+.idea
