@@ -8,19 +8,14 @@ import java.util.regex.Pattern;
 
 import static hms.kite.app.util.ConfigUtil.*;
 
-/**
- * Created with IntelliJ IDEA.
- * User: isuruanu
- * Date: 1/14/14
- * Time: 10:08 AM
- * To change this template use File | Settings | File Templates.
- */
 public class RequestUtil {
 
     private static final Pattern moMsgPattern;
+    private static final Pattern sourceAddressPattern;
 
     static {
         moMsgPattern = Pattern.compile(getApplicationConfig("message.template.regex"), Pattern.CASE_INSENSITIVE);
+        sourceAddressPattern = Pattern.compile(getApplicationConfig("source.address.pattern"));
     }
 
 
@@ -31,5 +26,13 @@ public class RequestUtil {
         } else {
             return Optional.absent();
         }
+    }
+
+    public static Optional<String> getAccountId(String sourceAddress) {
+        final Matcher matcher = sourceAddressPattern.matcher(sourceAddress);
+        if(matcher.matches()) {
+            return Optional.of(matcher.group("msisdn"));
+        }
+        return Optional.absent();
     }
 }
