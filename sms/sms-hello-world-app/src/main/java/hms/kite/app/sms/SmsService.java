@@ -67,7 +67,28 @@ public class SmsService implements MoSmsListener{
         logger.info(MessageFormat.format("Mo Msg keyword is = [{0}], message part is = [{1}]",
                 moMessage.getKeyword(), moMessage.getMessage().or("N/A")));
 
-        return successMessageFormatResponse;
+
+        if(!moMessage.getMessage().isPresent()) {
+            return invalidMessageFormatResponse;
+        }
+
+        final Optional<Conversion> conversionOpt = getConversion(moMessage.getMessage().get());
+        if(!conversionOpt.isPresent()) {
+            return invalidMessageFormatResponse;
+        }
+
+        final Conversion conversion = conversionOpt.get();
+        final String conversionMapKey = conversion.getSource() + "to" + conversion.getTarget();
+
+        final Optional<Double> conversionScaleOpt = getConversionScale(conversionMapKey);
+        if(!conversionOpt.isPresent()) {
+            return invalidMessageFormatResponse;
+        }
+
+        final Double aDouble = conversionScaleOpt.get();
+        final double response = Integer.valueOf(conversion.getValue()) * aDouble;
+
+        return "Your conversion response is " + response;
     }
 
 
