@@ -1,0 +1,20 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >    
+        
+        <item
+        android:id="@+id/language_english"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        android:icon="@drawable/english_language"
+        android:title="@string/english_laguage"
+        android:onClick="changeLanguage"/>    
+    
+        <item
+        android:id="@+id/language_spanish"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        android:icon="@drawable/spanish_language"
+        android:title="@string/spanish_laguage"
+        android:onClick="changeLanguage"
+        />
+        
+</menu>

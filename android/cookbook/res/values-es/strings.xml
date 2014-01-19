@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">cookbook</string>
+    <string name="action_settings">Configuración</string>
+    <string name="action_language">idioma</string>
+    <string name="hello_world">Bienvenida a libro de cocina!</string>
+    
+    <string name="english_laguage">Inglés</string>
+    <string name="spanish_laguage">español</string>
+
+</resources>
