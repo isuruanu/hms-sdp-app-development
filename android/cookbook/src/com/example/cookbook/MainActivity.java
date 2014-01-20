@@ -1,13 +1,17 @@
 package com.example.cookbook;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
+
+import com.example.cookbook.repo.RepositoryService;
+import com.example.cookbook.repo.domain.Recipe;
 
 import android.os.Build;
 import android.os.Bundle;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.ListActivity;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
@@ -22,17 +26,27 @@ import android.widget.PopupMenu;
 @SuppressLint("NewApi")
 public class MainActivity extends ListActivity {
 
+	RepositoryService repoService;
+	ReciepeItemListAdapter reciepeItemListAdapter; 
+	
+	public static final String titleIntentKey = "com.exmaple.cookbook.title";
+	public static final String longDescriptionIntentKey = "com.exmaple.cookbook.long.description";
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+		super.onCreate(savedInstanceState);		
 		createContentMenu();
 	}
 
 	private void createContentMenu() {		
-		setContentView(R.layout.activity_main);	
-		setListAdapter(new ReciepeItemListAdapter(this, Arrays.asList("1", "2", "3")));		
- 	}	
-	
+		setContentView(R.layout.activity_main);
+		repoService = new RepositoryService(this);
+		String localeName = getResources().getConfiguration().locale.getLanguage();		
+		List<Recipe> recipeList = repoService.getRecipeList(localeName);
+		reciepeItemListAdapter = new ReciepeItemListAdapter(this, recipeList);
+		setListAdapter(reciepeItemListAdapter);		
+ 	}			
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -61,7 +75,14 @@ public class MainActivity extends ListActivity {
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		// TODO Auto-generated method stub
 		super.onListItemClick(l, v, position, id);
-		Log.v("hello", "hello world");
+		Recipe recipe = (Recipe)reciepeItemListAdapter.getItem(position);
+		String longDescription = recipe.getDescriptions().getLongDescription();
+		String title = recipe.getDescriptions().getTitle();			
+				
+		Intent intent = new Intent(this, DisplayRecipeActivity.class);
+		intent.putExtra(longDescriptionIntentKey, longDescription);		
+		intent.putExtra(titleIntentKey, title);
+		startActivity(intent);		
 	}
 
 	public void changeLanguage(MenuItem item) {		
